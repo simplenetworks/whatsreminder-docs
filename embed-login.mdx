@@ -1,0 +1,32 @@
+---
+title: Embed Form di Login
+description: "Codice HTML per embed Form di Login su pagina esterna"
+---
+
+```bash html
+<style>
+  /* Stile normale del pulsante */
+  .custom-button {
+    background-color: #FE7701;
+    color: white;
+    transition: all 0.3s ease; /* Transizione per effetto hover */
+    padding: 10px 20px; /* Dimensioni del pulsante */
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Stile del pulsante durante l'hover */
+  .custom-button:hover {
+    background-color: #06b700; /* Cambio colore durante l'hover */
+    transform: scale(0.85); /* Effetto shrink durante l'hover */
+  }
+</style>
+
+<form action="https://backend-portainer-whatsreminder.simplenetworks.it/api/direct" method="post">
+  <input type="hidden" name="error" value="https://www.yoururlonerror.com" />
+  Email: <input type="text" name="email"><br>
+  Password: <input type="password" name="password">
+  <p></p>
+  <p><input type="submit" value="Accedi" name="Accedi" class="custom-button"><br></p>
+</form>
+```

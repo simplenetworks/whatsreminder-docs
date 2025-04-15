@@ -23,15 +23,28 @@
   "openapi": "/my-api/api-swagger-dev-documentation.json",
   "tabs": [
     {
-      "name": "API Reference",
+      "name": "Documentazione",
+      "url": "/"
+    },
+    {
+      "name": "APIs",
       "url": "api-reference"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Iniziare",
       "pages": [
-        "introduction"
+        "introduction",
+        "embed-login",
+        "privacy-policy"
+      ]
+    },
+    {
+      "group": "Messaggi",
+      "pages": [
+        "api-reference/qr-code",
+        "api-reference/online-state"
       ]
     }
   ],

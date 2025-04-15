@@ -1,11 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "Trilly API",
+    "description": "Trilly APIs",
     "version": "1.0.0"
   },
   "servers": [
@@ -13,9 +10,10 @@
       "url": "http://sandbox.mintlify.com"
     }
   ],
-  "security": [
+  "tags": [
     {
-      "bearerAuth": []
+      "name": "Messages",
+      "description": "Messages routes"
     }
   ],
   "paths": {
@@ -128,25 +126,88 @@
           }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+    },
+    "/api/session/{id_sessione}/code": {
+      "get": {
+        "summary": "QR Code",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, visualizza il QR code che, inquadrato dal telefono all’interno di WhatsApp o WhatsApp Business (nell’area gestione dispositivi > aggiungi dispositivo), stabilisce la connessione tra Trilly e il telefono stesso. **Essendo il QR Code offerto da WhatsApp refreshato ogni 30 secondi circa, si suggerisce di ri-effettuare una nuova chiamata API ogni 20 secondi fintanto che non avviene l’aggancio.**",
+        "parameters": [
+          {
+            "name": "id_sessione",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'id della sessione."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "QR Code in formato base64."
+                },
+                "example": "<QR Code in formato base64>"
               }
             }
           }
-        },
+        }
+      }
+    },
+    "/api/session/{id_sessione}/online": {
+      "get": {
+        "summary": "Impostazione stato online",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, imposta lo stato online come 'assente' in modo da poter ricevere le notifiche sugli altri dispositivi.\n\n *N.B. lo stato verrà aggiornato solamente se il dispositivo risulta connesso. E’ altamente consigliato concatenare questa chiamata alla connessione con QR Code da parte dell’utente.*",
+        "parameters": [
+          {
+            "name": "id_sessione",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'id della sessione."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "Lo stato dell'utente."
+                    }
+                  }
+                },
+                "example": {
+                  "status": true
+                }
+              }
+            }
           }
         }
       }
