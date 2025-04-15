@@ -1,0 +1,41 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Trilly",
+  "logo": {
+    "dark": "/logo/dark.webp",
+    "light": "/logo/light.png"
+  },
+  "theme": "quill",
+  "favicon": "favicon.png",
+  "colors": {
+    "primary": "#075308",
+    "light": "#EBFFE9",
+    "dark": "#075308",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarCtaButton": {
+    "name": "Visita il sito Web",
+    "url": "https://trilly.chat/"
+  },
+  "openapi": "/my-api/api-swagger-dev-documentation.json",
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://trilly.chat/"
+  }
+}
