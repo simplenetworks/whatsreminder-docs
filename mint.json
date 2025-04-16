@@ -42,7 +42,12 @@
       "pages": [
         "introduction",
         "embed-login",
-        "privacy-policy",
+        "privacy-policy"
+      ]
+    },
+    {
+      "group": "Messaggi",
+      "pages": [
         "message-recived-webhook",
         "message-sent-webhook",
         "message-failed-webhook"
@@ -64,7 +69,9 @@
         "api-reference/messages/send-message",
         "api-reference/messages/delete-message",
         "api-reference/messages/message-status",
-        "api-reference/messages/resend-message"
+        "api-reference/messages/resend-message",
+        "api-reference/messages/stop-message-sequence",
+        "api-reference/messages/message-period-outcome"
       ]
     },
     {
@@ -74,12 +81,14 @@
         "api-reference/blacklist/add-blacklist",
         "api-reference/blacklist/remove-blacklist"
       ]
-    }
-    ,
+    },
     {
       "group": "Partners",
       "pages": [
-        "api-reference/messages/resend-message"
+        "api-reference/partner/partner-new-client-account",
+        "api-reference/partner/partner-update-client-account",
+        "api-reference/partner/partner-reset-client-session",
+        "api-reference/partner/partner-client-expiry-date"
       ]
     }
   ],

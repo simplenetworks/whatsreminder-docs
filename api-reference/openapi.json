@@ -150,16 +150,16 @@
     "/api/start/{id_sequenza}": {
       "post": {
         "summary": "Invio Messaggio Standard (interno a Sequenza Standard)",
-        "description": "Questa chiamata invia un messaggio standard.",
+        "description": "Questa chiamata consente di attivare all’interno di Trilly una sequenza di messaggi WhatsApp verso un unico numero di telefono destinatario. La sequenza può essere costituita da 1 solo messaggio oppure da più messaggi. All’interno della struttura verrà inserito il campo parametrico del numero di telefono verso cui punterà la sequenza, con eventuale corredo di una serie di ulteriori campi parametrici, che potranno essere stringhe di testo da includere all’interno del copy del messaggio; un url di un file multimediale disponibile online (caricato in FTP) che potrà essere utilizzato come allegato multimediale (dovrà presentare estensioni ammesse); oppure uno più riferimenti temporali (data/ora) che potranno regolare il timing di invio di uno o più messaggi inclusi nella sequenza. Ogni singolo messaggio interno alla sequenza potrà avere come criterio temporale la chiamata API (con eventuale delay), oppure un anticipo o un delay rispetto ad un riferimento temporale (data/ora) che dovrà essere trasmesso nei campi parametrici. Alla ricezione della chiamata, Trilly programmerà in unica soluzione l’invio dei messaggi previsti all’interno della sequenza. Verranno restituiti gli ID univoci di tutti i messaggi programmati.",
         "parameters": [
           {
-            "name": "id_sessione",
+            "name": "id_sequenza",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "L'id della sessione."
+            "description": "L'id della sequenza."
           },
           {
             "name": "api_key",
@@ -684,6 +684,134 @@
                       "message": "Numero di telefono non trovato in blacklist"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/create": {
+      "post": {
+        "summary": "Generazione Nuovo Account Trilly da Partner",
+        "description": "Questa chiamata consente ai partner di creare nuovi account cliente associati al proprio Account Partner. In seguito alla creazione, vengono generati e restituiti automaticamente API Key, ID Cliente e ID sessione; inoltre il cliente apparirà nella Dashboard Partner. <Note>Email e password, se non verranno forniti dal Partner ai singoli clienti per accesso individuale a Trilly (tipicamente in caso di White Label), potranno essere “di fantasia” (ma la email deve avere il formato con @).</Note> <Note>In caso di successo, verranno restituiti i dettagli del nuovo account cliente, inclusi l'ID cliente, l'ID sessione, e la nuova API Key.</Note>",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "API Key del Partner."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome dell'account cliente."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email associata all'account (deve rispettare il formato email)."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password del cliente."
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Numero di telefono associato al cliente."
+                  },
+                  "account_type": {
+                    "type": "string",
+                    "default": "full",
+                    "enum": [
+                      "test",
+                      "baby",
+                      "full"
+                    ],
+                    "description": "Tipologia dell'account.\n - `test` : 100 crediti e scadenza account dopo 14 giorni dalla creazione.\n - `baby` : 2000 crediti a refill annuale.\n - `full` : nessuna limitazione (account attuali)."
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password",
+                  "phone"
+                ]
+              },
+              "examples": {
+                "Esempio": {
+                  "value": {
+                    "name": "Mario Rossi",
+                    "email": "cliente@example.com",
+                    "password": "passwordSicura!",
+                    "phone": "3331122334",
+                    "account_type": "full"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_client": {
+                      "type": "string",
+                      "description": "ID del cliente."
+                    },
+                    "id_sessione": {
+                      "type": "string",
+                      "description": "ID della sessione."
+                    },
+                    "api_key": {
+                      "type": "string",
+                      "description": "API Key assegnata al nuovo account cliente."
+                    },
+                    "nome_account": {
+                      "type": "string",
+                      "description": "Nome dell'account cliente."
+                    },
+                    "telefono": {
+                      "type": "string",
+                      "description": "Numero di telefono associato."
+                    },
+                    "email_di_login": {
+                      "type": "string",
+                      "description": "Email usata per il login cliente."
+                    },
+                    "account_type": {
+                      "type": "string",
+                      "description": "Tipologia dell'account creato."
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "description": "Data e ora chiamata (fuso orario UTC)."
+                    }
+                  }
+                },
+                "example": {
+                  "id_client": "abc123def456",
+                  "id_sessione": "sess789ghi012",
+                  "api_key": "xyz-unique-apikey",
+                  "nome_account": "Mario Rossi",
+                  "telefono": "3331122334",
+                  "email_di_login": "cliente@example.com",
+                  "account_type": "full",
+                  "timestamp": "2025-04-16T12:00:00Z"
                 }
               }
             }
