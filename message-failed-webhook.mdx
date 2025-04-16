@@ -1,0 +1,17 @@
+---
+title: Webhook Messaggio Fallito
+description: "Struttura dei dati che l’url indicato dal cliente riceverà in caso di fallimento di un messaggio."
+---
+
+Di seguito viene riportata la struttura dei dati contenuti nella chiamata POST che l’url indicato dal Partner riceverà in caso di fallimento di un messaggio dal telefono connesso a Trilly a causa di “destinatario non presente su WhatsApp”. La logica è quella di identificare (ed eventualmente taggare ed eliminare da successivi invii) numeri di telefono errati, così da rimuoverli o taggarli opportunamente per evitare in futuro invii a vuoto.
+
+```bash json
+{
+  "client": CLIENTE,
+  "client_id": ID CLIENTE,
+  "message_id": ID MESSAGGIO,
+  "from": TELEFONO MITTENTE,
+  "to": TELEFONO DESTINATARIO,
+  "reason": RAGIONE DEL FALLIMENTO
+}
+```

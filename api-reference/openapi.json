@@ -7,130 +7,14 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "tags": [
-    {
-      "name": "Messages",
-      "description": "Messages routes"
+      "url": "https://backend.trilly.chat"
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/session/{id_sessione}/code": {
       "get": {
         "summary": "QR Code",
-        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, visualizza il QR code che, inquadrato dal telefono all’interno di WhatsApp o WhatsApp Business (nell’area gestione dispositivi > aggiungi dispositivo), stabilisce la connessione tra Trilly e il telefono stesso. **Essendo il QR Code offerto da WhatsApp refreshato ogni 30 secondi circa, si suggerisce di ri-effettuare una nuova chiamata API ogni 20 secondi fintanto che non avviene l’aggancio.**",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, visualizza il QR code che, inquadrato dal telefono all’interno di WhatsApp o WhatsApp Business (nell’area gestione dispositivi > aggiungi dispositivo), stabilisce la connessione tra Trilly e il telefono stesso.<Tip>Essendo il QR Code offerto da WhatsApp refreshato ogni 30 secondi circa, si suggerisce di ri-effettuare una nuova chiamata API ogni 20 secondi fintanto che non avviene l’aggancio.</Tip>",
         "parameters": [
           {
             "name": "id_sessione",
@@ -169,7 +53,7 @@
     "/api/session/{id_sessione}/online": {
       "get": {
         "summary": "Impostazione stato online",
-        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, imposta lo stato online come 'assente' in modo da poter ricevere le notifiche sugli altri dispositivi.\n\n *N.B. lo stato verrà aggiornato solamente se il dispositivo risulta connesso. E’ altamente consigliato concatenare questa chiamata alla connessione con QR Code da parte dell’utente.*",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, imposta lo stato online come 'assente' in modo da poter ricevere le notifiche sugli altri dispositivi.<Note>*N.B. lo stato verrà aggiornato solamente se il dispositivo risulta connesso. E’ altamente consigliato concatenare questa chiamata alla connessione con QR Code da parte dell’utente.*</Note>",
         "parameters": [
           {
             "name": "id_sessione",
@@ -211,67 +95,600 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+    },
+    "/api/session/{id_session}/defaultSequence": {
+      "get": {
+        "summary": "Richiama Webhook Sequenza Standard a partire da ID Session e API Key",
+        "description": "Questa chiamata, a partire da ID sessione e API Key cliente, restituisce l’endpoint (start) da utilizzare per effettuare gli invii dei messaggi strutturati (a livello di contenuto e di dinamche temporali) internamente ai vostri sistemi. In particolare il webhook conterrà l’ID Sequenza.",
+        "parameters": [
+          {
+            "name": "id_sessione",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'id della sessione."
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
           }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "string",
+                      "description": "L'ID Sequenza di start.'"
+                    },
+                    "stop": {
+                      "type": "string",
+                      "description": "L'ID Sequenza di stop."
+                    }
+                  }
+                },
+                "example": {
+                  "start": "HOOK_START",
+                  "stop": "HOOK_STOP"
+                }
               }
             }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
           }
         }
       }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+    "/api/start/{id_sequenza}": {
+      "post": {
+        "summary": "Invio Messaggio Standard (interno a Sequenza Standard)",
+        "description": "Questa chiamata invia un messaggio standard.",
+        "parameters": [
+          {
+            "name": "id_sessione",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'id della sessione."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Numero di telefono a cui si vuole scrivere."
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Testo del messaggio."
+                  },
+                  "media": {
+                    "type": "string",
+                    "description": "Url del contenuto multimediale che si vuole allegare."
+                  },
+                  "media_name": {
+                    "type": "string",
+                    "description": "Nome che si vuole compaia sotto a miniatura di eventuale PDF."
+                  }
+                },
+                "required": [
+                  "phone"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "array",
+                      "items": {
+                        "type":"string"
+                      },
+                      "description": "ID dei messaggi generati."
+                    }
+                  }
+                },
+                "example": {
+                  "id": ["ID_MESSAGGIO_GENERATO"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/messages/cancel/all": {
+      "post": {
+        "summary": "Annulla singoli messaggi",
+        "description": "Questa chiamata consente di bloccare l’invio di specifici messaggi i cui ID pubblici devono venire trasmessi all’interno della richiesta.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Lista di id dei messaggi da eliminare."
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Messaggio del risultato."
+                    },
+                    "id": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "ID dei messaggi annullati."
+                    }
+                  }
+                },
+                "example": {
+                  "message": "XXX messaggi annullati",
+                  "id": ["ID_MESSAGGI_ANNULLATI"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message/{id_messaggio}/status": {
+      "get": {
+        "summary": "Verifica Stato messaggio",
+        "description": "Questa chiamata consente, a partire dall’ID Messaggio, di sapere lo stato del messaggio.",
+        "parameters": [
+          {
+            "name": "id_messaggio",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'id del messaggio."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "L'ID del messaggio."
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "FAILED",
+                        "COMPLETED",
+                        "PENDING",
+                        "CANCELLED",
+                        "RESCHEDULED",
+                        "BLACKLISTED"
+                      ],
+                      "description": "Lo stato del messaggio."
+                    }
+                  }
+                },
+                "example": {
+                  "id": "ID_MESSAGGIO",
+                  "status": "COMPLETED"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/messages/reschedule/all": {
+      "post": {
+        "summary": "Re-invio messaggi",
+        "description": "Questa chiamata consente il re-invio di una serie di messaggi a partire dal loro ID.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Lista di ID dei messaggi da reinviare."
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data pianificata per il reinvio."
+                  }
+                },
+                "required": [
+                  "id",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Lista degli ID dei  messaggi reinviati."
+                    }
+                  }
+                },
+                "example": {
+                  "id": [
+                    "ID_MESSAGGIO_GENERATO"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/{id_client}/sessions": {
+      "get": {
+        "summary": "Richiama ID Sessione a partire da ID Client",
+        "description": "Questa chiamata consente di ottenere la lista degli ID sessione associati a uno specifico client.",
+        "parameters": [
+          {
+            "name": "id_client",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ID del client di cui recuperare le sessioni."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Lista di ID sessione associati al client."
+                    }
+                  }
+                },
+                "example": {
+                  "id": [
+                    "ID_SESSIONE"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/session/{id_sessione}/status": {
+      "get": {
+        "summary": "Stato connessione sessione",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly, restituisce lo stato della connessione tra Trilly e il dispositivo WhatsApp ad esso afferente.",
+        "parameters": [
+          {
+            "name": "id_sessione",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ID della sessione per la quale si vuole verificare lo stato di connessione."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "Stato della connessione tra Trilly e il dispositivo associato alla sessione."
+                    }
+                  }
+                },
+                "example": {
+                  "status": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/blacklist/check": {
+      "get": {
+        "summary": "Blacklist - Verifica",
+        "description": "Controlla se un numero è presente in blacklist.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Il numero di telefono da verificare."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "enum": [
+                        "Numero di telefono esistente in blacklist",
+                        "Numero di telefono non trovato in blacklist"
+                      ],
+                      "description": "Esito della verifica."
+                    }
+                  }
+                },
+                "examples": {
+                  "Numero presente": {
+                    "value": {
+                      "message": "Numero di telefono esistente in blacklist"
+                    }
+                  },
+                  "Numero assente": {
+                    "value": {
+                      "message": "Numero di telefono non trovato in blacklist"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/blacklist/add": {
+      "post": {
+        "summary": "Blacklist - Aggiunta",
+        "description": "Aggiunge un numero di telefono alla blacklist, così che eventuali futuri invii disposti su uno specifico numero di telefono vengano bloccati.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Numero di telefono da aggiungere alla blacklist."
+                  },
+                  "soft_block": {
+                    "type": "boolean",
+                    "description": "Se `true`, il numero viene aggiunto in blacklist sono per gli invii massivi, permettendo quindi gli invii da sequenze."
+                  }
+                },
+                "required": [
+                  "phone"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/blacklist/remove": {
+      "delete": {
+        "summary": "Blacklist - Rimozione",
+        "description": "Rimuove un numero di telefono dalla blacklist.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ApiKey dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Numero di telefono da rimuovere dalla blacklist."
+                  }
+                },
+                "required": [
+                  "phone"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "enum": [
+                        "Numero di telefono rimosso dalla blacklist",
+                        "Numero di telefono non trovato in blacklist"
+                      ],
+                      "description": "Esito della rimozione."
+                    }
+                  }
+                },
+                "examples": {
+                  "Numero rimosso": {
+                    "value": {
+                      "message": "Numero di telefono rimosso dalla blacklist"
+                    }
+                  },
+                  "Numero non trovato": {
+                    "value": {
+                      "message": "Numero di telefono non trovato in blacklist"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

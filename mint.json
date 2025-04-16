@@ -16,6 +16,11 @@
       "to": "#07C983"
     }
   },
+  "api": {
+    "playground": {
+      "mode": "simple"
+    }
+  },
   "topbarCtaButton": {
     "name": "Visita il sito Web",
     "url": "https://trilly.chat/"
@@ -33,18 +38,48 @@
   ],
   "navigation": [
     {
-      "group": "Iniziare",
+      "group": "Iniziamo",
       "pages": [
         "introduction",
         "embed-login",
-        "privacy-policy"
+        "privacy-policy",
+        "message-recived-webhook",
+        "message-sent-webhook",
+        "message-failed-webhook"
+      ]
+    },
+    {
+      "group": "Impostazioni",
+      "pages": [
+        "api-reference/settings/qr-code",
+        "api-reference/settings/online-state",
+        "api-reference/settings/client-session-id",
+        "api-reference/settings/session-status"
       ]
     },
     {
       "group": "Messaggi",
       "pages": [
-        "api-reference/qr-code",
-        "api-reference/online-state"
+        "api-reference/messages/webhook-standard-sequence",
+        "api-reference/messages/send-message",
+        "api-reference/messages/delete-message",
+        "api-reference/messages/message-status",
+        "api-reference/messages/resend-message"
+      ]
+    },
+    {
+      "group": "Blacklist",
+      "pages": [
+        "api-reference/blacklist/verify-blacklist",
+        "api-reference/blacklist/add-blacklist",
+        "api-reference/blacklist/remove-blacklist"
+      ]
+    }
+    ,
+    {
+      "group": "Partners",
+      "pages": [
+        "api-reference/messages/resend-message"
       ]
     }
   ],

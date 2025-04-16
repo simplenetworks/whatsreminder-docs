@@ -1,0 +1,21 @@
+---
+title: Webhook Ricezione Messaggio Inviato
+description: "Struttura dei dati che l’url indicato dal cliente riceverà in caso di invio di un messaggio."
+---
+
+Di seguito viene riportata la struttura dei dati contenuti nella chiamata POST che l’url indicato dal cliente riceverà in caso di invio di un messaggio dal telefono connesso a Trilly.
+
+
+```bash json
+{
+  “body”: stringa, <! – testo messaggio –>
+  “from”: TELEFONO_MITTENTE,
+  “to”:  TELEFONO_RICEVENTE,
+  “media”: URL MEDIA DOWNLOADABILE,
+  "timestamp": "YYYY-MM-DDTHH:mm:SSZ" (fuso orario UTC)
+}
+```
+
+> Il campo body sarà sicuramente vuoto nel caso di invio di un media vocale. Il media vocale avrà estensione .aac
+
+> Nel caso in cui venga inviata una posizione, sarà presente il campo “location”, che conterrà in formato json la posizione inviata.
