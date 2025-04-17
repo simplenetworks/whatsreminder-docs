@@ -818,6 +818,437 @@
           }
         }
       }
+    },
+    "/api/client/update": {
+      "post": {
+        "summary": "Aggiornamento Account Cliente",
+        "description": "Questa chiamata consente ai partner di aggiornare la tipologia di account di un cliente associato al proprio Account Partner. L’API verifica che il cliente appartenga al partner tramite l’API Key. In caso di successo, la sessione del cliente verrà resettata.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API Key del Partner che effettua la richiesta."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_client": {
+                    "type": "string",
+                    "description": "ID del cliente da aggiornare."
+                  },
+                  "account_type": {
+                    "type": "string",
+                    "enum": [
+                      "test",
+                      "baby",
+                      "full",
+                      "disable"
+                    ],
+                    "description": "Tipologia di account.\n - `test` : 100 crediti e scadenza account dopo 14 giorni dalla creazione.\n - `baby` : 2000 crediti a refill annuale.\n - `full` : nessuna limitazione (account attuali).\n - `disable` : l’account viene disattivato."
+                  }
+                },
+                "required": [
+                  "id_client",
+                  "account_type"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_client": {
+                      "type": "string",
+                      "description": "ID del cliente."
+                    },
+                    "account_type": {
+                      "type": "string",
+                      "description": "Tipologia di account assegnata."
+                    }
+                  }
+                },
+                "example": {
+                  "value": {
+                    "id_client": "12345",
+                    "account_type": "baby"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/session/{id}/reset": {
+      "post": {
+        "summary": "Reset Sessione Cliente da Partner",
+        "description": "Questa chiamata consente ai partner di resettare la sessione di un cliente associato al proprio Account Partner. L’API verifica che il cliente appartenga al partner tramite l’API Key. In caso di successo, la sessione del cliente verrà resettata.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ID della sessione da resettare."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API Key del partner che effettua la richiesta."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Esito dell'operazione."
+                    }
+                  }
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "L'API Key fornita non è valida o non appartiene a un partner.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "API Key non corretta"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Il cliente non appartiene al partner specificato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Non autorizzato a gestire questa sessione"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client o sessione non trovati.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Client non trovato": {
+                    "value": {
+                      "error": "Client non trovato"
+                    }
+                  },
+                  "Sessione non trovata": {
+                    "value": {
+                      "error": "Sessione non trovata"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clients/expiration": {
+      "get": {
+        "summary": "Recuperare la data di scadenza a partire da una lista di id clienti",
+        "description": "Questa chiamata consente di ottenere la data di scadenza di uno o più clienti associati al proprio account Partner. Viene restituita una lista di clienti con `ID`, `Nome` e `Data di Scadenza`. Se alcuni ID non esistono o non appartengono al partner, verrà restituito un errore con i dettagli.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API Key del Partner."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "Lista degli ID dei clienti di cui si vuole recuperare la data di scadenza."
+                  }
+                },
+                "required": [
+                  "client_ids"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lista dei clienti con relative date di scadenza.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID del cliente."
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome assegnato al cliente."
+                      },
+                      "expiration_date": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Data di scadenza in formato 'YYYY-MM-DD'. Se null, l'account non ha una data di scadenza."
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": 123,
+                    "nome": "Ristorante",
+                    "expiration_date": null
+                  },
+                  {
+                    "id": 456,
+                    "nome": "Hotel",
+                    "expiration_date": "2025-03-23"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stop/{id_sequenza}": {
+      "post": {
+        "summary": "Blocco sequenza con annullamento dei messaggi in sequenza",
+        "description": "Questa chiamata consente di bloccare l’invio di eventuali messaggi programmati per il futuro tramite una sequenza attiva. All’interno della struttura dovrà trovare spazio il campo parametrico del numero di telefono che deve cessare di ricevere i messaggi dalla sequenza in questione. Alla ricezione della chiamata, Trilly annullerà l’eventuale programmazione di invii WhatsApp internamente alla sequenza che puntino al numero trasmesso a livello parametrico. Verranno restituiti gli ID univoci di tutti i messaggi annullati.",
+        "parameters": [
+          {
+            "name": "id_sequenza",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ID della sequenza di cui si vogliono annullare i messaggi."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'API Key dell'utente."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Numero di telefono per il quale bloccare i messaggi in sequenza."
+                  }
+                },
+                "required": [
+                  "phone"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messaggi della sequenza annullati con successo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Messaggio di conferma con il numero di messaggi annullati."
+                    },
+                    "id": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Lista degli ID dei messaggi annullati."
+                    }
+                  }
+                },
+                "example": {
+                  "message": "3 messaggi annullati",
+                  "id": [
+                    "msg_1",
+                    "msg_2",
+                    "msg_3"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/messages/statusByPeriod": {
+      "get": {
+        "summary": "Recupero degli Esiti dei Messaggi per Periodo",
+        "description": "Questo endpoint consente di ottenere, per un cliente identificato tramite la propria API key, l’elenco degli esiti di tutti i messaggi presi in carico (basandosi sul campo `completion_date`) all’interno di un intervallo temporale specificato. Per ogni messaggio, l’API restituisce il suo ID, lo stato e, in caso di fallimento, la ragione (contenuta nel campo `resp_message`). <Note>Assicurati che le date siano passate esattamente nel formato richiesto, con uno spazio tra la data e l'orario (eventualmente codificato come %20 nell'URL).</Note>",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "La chiave API del cliente autenticato."
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "01/10/2025 14:11"
+            },
+            "description": "Data e ora di inizio del periodo. Il formato richiesto è 'dd/mm/YYYY HH:i' (es. '01/10/2025 14: 11')."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "01/10/2025 15:00"
+            },
+            "description": "Data e ora di fine del periodo. Il formato richiesto è 'dd/mm/YYYY HH:i' (es. '01/10/2025 15: 00')."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco degli esiti dei messaggi inviati nel periodo specificato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message_id": {
+                            "type": "integer",
+                            "description": "ID del messaggio."
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Esito del messaggio."
+                          },
+                          "reason": {
+                            "type": ["string", "null"],
+                            "description": "Motivo del fallimento."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "messages": [
+                    {
+                      "message_id": 25058,
+                      "status": "FAILED",
+                      "reason": "Sessione non connessa"
+                    },
+                    {
+                      "message_id": 25059,
+                      "status": "SENT",
+                      "reason": null
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
