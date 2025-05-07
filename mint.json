@@ -25,7 +25,7 @@
     "name": "Visita il sito Web",
     "url": "https://trilly.chat/"
   },
-  "openapi": "/my-api/api-swagger-dev-documentation.json",
+  "openapi": "/api-reference/openapi.json",
   "tabs": [
     {
       "name": "Documentazione",
