@@ -11,6 +11,101 @@
     }
   ],
   "paths": {
+    "/api/client/{id_client}/snapshot": {
+      "get": {
+        "summary": "Snapshot del cliente",
+        "description": "Restituisce una panoramica istantanea dell’account cliente: nome, login, telefono, tipologia di connessione, profilo, crediti, periodo di refill, data di scadenza e funzionalità attive.",
+        "parameters": [
+          {
+            "name": "id_client",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del cliente."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chiave API del partner."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "account_name": {
+                      "type": "string",
+                      "description": "Nome dell'account cliente."
+                    },
+                    "login": {
+                      "type": "string",
+                      "description": "Email di login del cliente."
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Numero di telefono del cliente."
+                    },
+                    "connection_type": {
+                      "type": "string",
+                      "description": "Tipologia di connessione (Socket|Send_app|Official)."
+                    },
+                    "profile": {
+                      "type": "string",
+                      "description": "Profilo account (Account gratuito|Fase di Test|Subscription Mensile|Subscription Annuale)."
+                    },
+                    "credits": {
+                      "type": "string",
+                      "description": "Crediti residui oppure 'Illimitati'."
+                    },
+                    "refill_period": {
+                      "type": "string",
+                      "description": "Periodo di refill (Nessuno|Mensile|Annuale)."
+                    },
+                    "expiration_date": {
+                      "type": ["string", "null"],
+                      "description": "Data di scadenza (YYYY-MM-DD) o null."
+                    },
+                    "active_features": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "Elenco delle funzionalità attive."
+                    }
+                  }
+                },
+                "example": {
+                  "account_name": "prova ros",
+                  "login": "provaros@mail.com",
+                  "phone": "1",
+                  "connection_type": "Socket",
+                  "profile": "Fase di Test",
+                  "credits": "Messaggi Residui: 10",
+                  "refill_period": "Annuale",
+                  "expiration_date": "2025-03-15",
+                  "active_features": [
+                    "Singolo messaggio",
+                    "Gestione Sequenze",
+                    "Invio Massivo",
+                    "Volantino",
+                    "Autorisponditore",
+                    "Importa/Esporta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/session/{id_sessione}/code": {
       "get": {
         "summary": "QR Code",

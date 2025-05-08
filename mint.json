@@ -59,7 +59,8 @@
         "api-reference/settings/qr-code",
         "api-reference/settings/online-state",
         "api-reference/settings/client-session-id",
-        "api-reference/settings/session-status"
+        "api-reference/settings/session-status",
+        "api-reference/settings/client-snapshot"
       ]
     },
     {
