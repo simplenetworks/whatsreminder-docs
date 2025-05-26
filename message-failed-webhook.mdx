@@ -5,8 +5,12 @@ description: "Struttura dei dati che l’url indicato dal cliente riceverà in c
 
 Di seguito viene riportata la struttura dei dati contenuti nella chiamata POST che l’url indicato dal Partner riceverà in caso di fallimento di un messaggio dal telefono connesso a Trilly. La logica è quella di monitorare gli invii falliti e, sulla base della ragione del fallimento dei vari invii, consentire di prevedere logiche consequenziali.
 
-Due esempi:
+Due esempi: 
+
+
 1: Se la ragione del fallimento è "Numero non presente su WhatsApp", quel numero potrà essere flaggato per evitare futuri invii a vuoto e/o chiamare l'invio di un SMS su altra piattaforma come strategia di contatto alternativa.
+
+
 2: Se la ragione del fallimento è "Sessione non connessa" si potrà prevedere di informare l'utente utilizzatore dell'account invitandolo a ripristinare la connessione.
 
 ```bash json
@@ -16,6 +20,6 @@ Due esempi:
   "message_id": ID MESSAGGIO,
   "from": TELEFONO MITTENTE,
   "to": TELEFONO DESTINATARIO,
-  "reason": Numero non registrato su WhatsApp | Errore nell\'invio del messaggio | Sessione non connessa | Estensione file non valida |
+  "reason": Numero non registrato su WhatsApp | Errore nell\'invio del messaggio | Sessione non connessa | Estensione file non valida 
 }
 ```
