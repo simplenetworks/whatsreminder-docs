@@ -1,0 +1,27 @@
+---
+title: Webhook Avviso Scadenza Account
+description: "Struttura dei dati che l’URL indicato dal cliente riceverà a mezzanotte del giorno di scadenza dell’account."
+---
+
+Di seguito viene descritta la struttura del webhook di “avviso scadenza” che verrà inviato automaticamente alla mezzanotte del giorno in cui il campo `expiration_date` dell’utente corrisponde alla data corrente. Il webhook viene inviato solo se:
+
+1. L’utente ha `expiration_date` non nullo.
+2. Il campo `expiration_hook` (URL) è impostato.
+
+---
+
+## 1. Webhook per il singolo Cliente
+
+**Endpoint:**  
+POST all’URL specificato in `User.expiration_hook`
+
+**Esempio di chiamata POST:**
+
+```bash json
+{
+  "user_id": 123,
+  "email": "cliente@example.com",
+  "expiration_date": "2025-06-03",
+  "message": "Il tuo account scade oggi. Effettua il rinnovo per evitare la disattivazione.",
+  "timestamp": "2025-06-03 00:00:00"
+}
