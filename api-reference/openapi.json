@@ -1263,7 +1263,7 @@
     "/api/messages/statusByPeriod": {
       "get": {
         "summary": "Recupero degli Esiti dei Messaggi per Periodo",
-        "description": "Questo endpoint consente di ottenere, per un cliente identificato tramite la propria API key, l’elenco degli esiti di tutti i messaggi presi in carico (basandosi sul campo `completion_date`) all’interno di un intervallo temporale specificato. Per ogni messaggio, l’API restituisce il suo ID, lo stato e, in caso di fallimento, la ragione (contenuta nel campo `resp_message`). <Note>Assicurati che le date siano passate esattamente nel formato richiesto, con uno spazio tra la data e l'orario (eventualmente codificato come %20 nell'URL).</Note>",
+        "description": "Questo endpoint consente di ottenere, per un cliente identificato tramite la propria API key, l’elenco degli esiti di tutti i messaggi presi in carico (basandosi sul campo `completion_date`) all’interno di un intervallo temporale specificato. Per ogni messaggio, l’API restituisce il suo ID, lo stato e, in caso di fallimento, la ragione (contenuta nel campo `resp_message`). <Note>Assicurati che le date siano passate esattamente nel formato richiesto, con uno spazio tra la data e l'orario (eventualmente codificato come %20 nell'URL). I limite di risposta e di 1000 risultati</Note>",
         "parameters": [
           {
             "name": "api_key",
