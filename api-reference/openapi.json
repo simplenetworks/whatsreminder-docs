@@ -1348,7 +1348,7 @@
     "/api/messages/cancel/pending": {
       "post": {
         "summary": "Annullamento dei messaggi in stato PENDING",
-        "description": "Questo endpoint consente di annullare **tutti** i messaggi in stato `PENDING` (non ancora inviati) associati al **cliente identificato tramite la propria API key**. Restituisce un elenco dei messaggi annullati, con l'ID e la data/ora in cui erano stati programmati per l'invio (`desired_date`). <Note>Se nessun messaggio è stato trovato in stato `PENDING`, il campo messages sarà una lista vuota.</Note> <Note>Il formato della `desired_date` è in **ISO_8601**.</Note>",
+        "description": "Questo endpoint consente di annullare i messaggi in stato `PENDING` (non ancora inviati) associati al **cliente identificato tramite la propria API key**. Restituisce un elenco dei messaggi annullati, con l'ID e la data/ora in cui erano stati programmati per l'invio (`desired_date`). <Note>Se nessun messaggio è stato trovato in stato `PENDING`, il campo messages sarà una lista vuota.</Note> <Note>Il formato della `desired_date` è in **ISO_8601**.</Note> <Note>Se il campo `phones` **non viene incluso** nella richiesta, l'endpoint annullerà **tutti** i messaggi in stato `PENDING` per il cliente associato alla API key.</Note>",
         "parameters": [
           {
             "name": "api_key",
@@ -1360,9 +1360,27 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phones": {
+                    "type": "array",
+                    "description": "I numeri di telefono di cui si vogliono annullare i messaggi in stato `PENDING`.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Messaggi in stato PENDING annullati con successo.",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
