@@ -90,7 +90,8 @@
         "api-reference/partner/partner-new-client-account",
         "api-reference/partner/partner-update-client-account",
         "api-reference/partner/partner-reset-client-session",
-        "api-reference/partner/partner-client-expiry-date"
+        "api-reference/partner/partner-client-expiry-date",
+        "api-reference/partner/partner-delete-pending-messages"
       ]
     }
   ],
