@@ -1423,6 +1423,200 @@
           }
         }
       }
+    },
+    "/api/messages/details": {
+      "get": {
+        "summary": "Recupera dettagli dei messaggi",
+        "description": "Restituisce i dettagli di uno o più messaggi, dato un elenco di ID dei messaggi ed una API Key valida.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API Key del cliente."
+          },
+          {
+            "name": "message_ids[]",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "Elenco di ID dei messaggi da recuperare."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dettagli dei messaggi trovati.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tipologia": {
+                            "type": "string",
+                            "description": "Origine del messaggio.",
+                            "enum": [
+                              "SINGLE",
+                              "SEQUENCE",
+                              "MASSIVE",
+                              "AUTOMATION"
+                            ]
+                          },
+                          "nome_invio": {
+                            "type": "string",
+                            "description": "Nome dell'invio."
+                          },
+                          "ricezione": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data e ora di ricezione."
+                          },
+                          "invio_desiderato": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time",
+                            "description": "Data e ora desiderata per l’invio."
+                          },
+                          "invio_previsto": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data e ora prevista per l’invio."
+                          },
+                          "invio_effettivo": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data e ora effettiva dell’invio."
+                          },
+                          "telefono": {
+                            "type": "string",
+                            "description": "Numero del destinatario."
+                          },
+                          "stato": {
+                            "type": "string",
+                            "description": "Stato del messaggio.",
+                            "enum": [
+                              "PENDING",
+                              "COMPLETED",
+                              "FAILED",
+                              "CANCELLED",
+                              "RESCHEDULED",
+                              "BLACKLISTED"
+                            ]
+                          },
+                          "cliente": {
+                            "type": "string",
+                            "description": "Nome del cliente associato."
+                          },
+                          "sequenza": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Nome della sequenza, se presente."
+                          },
+                          "template": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Nome del template, se presente."
+                          },
+                          "contenuto": {
+                            "type": "string",
+                            "description": "Testo del messaggio."
+                          },
+                          "media_url": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "URL del contenuto multimediale, se presente."
+                          },
+                          "latitudine": {
+                            "type": [
+                              "number",
+                              "null"
+                            ],
+                            "description": "Latitudine, se posizione allegata."
+                          },
+                          "longitudine": {
+                            "type": [
+                              "number",
+                              "null"
+                            ],
+                            "description": "Longitudine, se posizione allegata."
+                          },
+                          "nome_media": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Nome del file multimediale allegato."
+                          },
+                          "richiesta": {
+                            "type": "string",
+                            "description": "Request payload originale (in JSON string)."
+                          },
+                          "risposta": {
+                            "type": "string",
+                            "description": "Messaggio di risposta del sistema."
+                          },
+                          "dettaglio_risposta": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Risposta dettagliata del sistema (se presente)."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "messages": [
+                    {
+                      "tipologia": "SEQUENCE",
+                      "nome_invio": "",
+                      "ricezione": "2025-07-18T10:06:13.000000Z",
+                      "invio_desiderato": "2025-07-18T10:06:13.000000Z",
+                      "invio_previsto": "2025-07-18T10:10:01.000000Z",
+                      "invio_effettivo": "2025-07-18T10:10:02.000000Z",
+                      "telefono": "391231233",
+                      "stato": "COMPLETED",
+                      "cliente": "ExampleName",
+                      "sequenza": "Sequenza Esempio",
+                      "template": "Messaggio Standard",
+                      "contenuto": "Contenuto",
+                      "media_url": null,
+                      "latitudine": null,
+                      "longitudine": null,
+                      "nome_media": null,
+                      "richiesta": "{\"phone\":\"391231233\",\"text\":\"Contenuto\",\"api_key\":\"abc123\"}",
+                      "risposta": "Messaggio inviato",
+                      "dettaglio_risposta": null
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
