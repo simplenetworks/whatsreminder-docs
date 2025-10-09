@@ -1617,6 +1617,116 @@
           }
         }
       }
+    },
+    "/api/partner/session/{id}/pair": {
+      "post": {
+        "summary": "Ottieni il codice OTP.",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly e da un numero di telefono, consentirà ad un partner di ricevere un codice OTP per un proprio cliente.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "description": "L'API key del partner.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "La sessione del cliente per cui si vuole creare il codice OTP.",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Phone": {
+                    "type": "string",
+                    "description": "Numero di telefono che si vuole associare al cliente."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Risultato dell'operazione."
+                    },
+                    "pairCode": {
+                      "type": "string",
+                      "description": "Codice OTP."
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "pairCode": "A1B2-C3D4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Descrizione dell'errore."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Non autorizzato"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Errore",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Risultato dell'operazione."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Il messaggio di errore."
+                    }
+                  }
+                },
+                "example": {
+                  "success": false,
+                  "message": "Impossibile generare il codice di pairing dopo più tentativi"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
