@@ -917,7 +917,7 @@
     "/api/client/update": {
       "post": {
         "summary": "Aggiornamento Account Cliente",
-        "description": "Questa chiamata consente ai partner di aggiornare la tipologia di account di un cliente associato al proprio Account Partner. L’API verifica che il cliente appartenga al partner tramite l’API Key. In caso di successo, la sessione del cliente verrà resettata.",
+        "description": "Questa chiamata consente ai partner di aggiornare la tipologia di account **e/o il nome** di un cliente associato al proprio Account Partner. L’API verifica che il cliente appartenga al partner tramite l’API Key. In caso di successo, la sessione del cliente verrà resettata solo se viene modificata la tipologia di account.",
         "parameters": [
           {
             "name": "api_key",
@@ -949,12 +949,20 @@
                       "disable"
                     ],
                     "description": "Tipologia di account.\n - `test` : 100 crediti e scadenza account dopo 14 giorni dalla creazione.\n - `baby` : 2000 crediti a refill annuale.\n - `full` : nessuna limitazione (account attuali).\n - `disable` : l’account viene disattivato."
+                  },
+                  "nome_cliente": {
+                    "type": "string",
+                    "description": "Nuovo nome del cliente. Se valorizzato, aggiorna anche il nome utente associato."
                   }
                 },
                 "required": [
-                  "id_client",
-                  "account_type"
+                  "id_client"
                 ]
+              },
+              "example": {
+                "id_client": "12345",
+                "account_type": "baby",
+                "nome_cliente": "Nuovo Nome Cliente"
               }
             }
           }
@@ -974,17 +982,31 @@
                     "account_type": {
                       "type": "string",
                       "description": "Tipologia di account assegnata."
+                    },
+                    "nome_cliente": {
+                      "type": "string",
+                      "description": "Nome aggiornato del cliente (se modificato)."
+                    },
+                    "user_name": {
+                      "type": "string",
+                      "description": "Nome aggiornato dell’utente associato."
                     }
                   }
                 },
                 "example": {
-                  "value": {
-                    "id_client": "12345",
-                    "account_type": "baby"
-                  }
+                  "id_client": "12345",
+                  "account_type": "baby",
+                  "nome_cliente": "Nuovo Nome Cliente",
+                  "user_name": "Nuovo Nome Utente"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Errore di validazione o API Key non valida."
+          },
+          "500": {
+            "description": "Errore interno durante l’aggiornamento del cliente."
           }
         }
       }
