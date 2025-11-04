@@ -1467,7 +1467,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "string"
               }
             },
             "description": "Elenco di ID dei messaggi da recuperare."
