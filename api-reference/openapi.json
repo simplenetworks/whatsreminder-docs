@@ -1458,7 +1458,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "API Key del cliente."
+            "description": "API Key del partner."
           },
           {
             "name": "message_ids[]",
