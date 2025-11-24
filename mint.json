@@ -51,8 +51,7 @@
         "message-recived-webhook",
         "message-sent-webhook",
         "message-failed-webhook",
-        "expiration-user-webhook",
-        "send-group- message"
+        "expiration-user-webhook"
       ]
     },
     {
