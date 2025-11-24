@@ -74,7 +74,8 @@
         "api-reference/messages/message-status",
         "api-reference/messages/resend-message",
         "api-reference/messages/stop-message-sequence",
-        "api-reference/messages/message-period-outcome"
+        "api-reference/messages/message-period-outcome",
+        "api-reference/messages/send-group-message"
       ]
     },
     {
