@@ -1,0 +1,68 @@
+---
+title: 'Inviare Messaggi dentro a Gruppi WhatsApp'
+description: 'Come inviare messaggi ai gruppi WhatsApp tramite Trilly usando ID Gruppo, formattazione numero e API correlate.'
+---
+
+# Inviare Messaggi dentro a Gruppi WhatsApp
+
+Trilly consente non solo di inviare messaggi ai singoli numeri di telefono, ma anche direttamente **all’interno dei Gruppi WhatsApp**, sfruttando l’ID univoco del gruppo.
+
+👉 **Guida completa ufficiale:**  
+https://trilly.chat/scrivere-messaggi-in-un-gruppo-whatsapp-usando-trilly/
+
+---
+
+## 🔎 Come funzionano i messaggi verso i Gruppi WhatsApp
+
+Per inviare un messaggio dentro a un gruppo WhatsApp, è necessario utilizzare il **Group ID**, che viene utilizzato al posto del numero di telefono.
+
+Un ID Gruppo WhatsApp può presentarsi in diversi formati, ad esempio:
+
+120363205432159876@g.us
+
+oppure nei nuovi formati “LID”:
+
+1234567890123456789012@lid
+
+oppure semplicemente:
+
+1234567890123456789012 (22 caratteri)
+
+
+Trilly riconosce automaticamente questi formati e li tratta come **destinatari validi di gruppo**.
+
+---
+
+## 📌 Regola fondamentale nel formato del campo `phone`
+
+L’ID del gruppo va passato come **stringa esattamente così com’è**, senza ulteriori modifiche o prefissi (es. +39).
+
+Il sistema lo riconosce grazie alle regole presenti.
+
+### Esempi accettati:
+120363205432159876@g.us
+1234567890123456789012
+393874923874@lid
+
+
+Se il valore rispetta uno di questi formati, Trilly **non applica alcuna normalizzazione** e utilizza direttamente l’ID per l'invio.
+
+---
+
+## 🚀 Invio di un messaggio verso un gruppo con Sequenza Standard
+
+L’invio avviene tramite:
+
+```http
+POST /api/start/{id_sequenza}?api_key=API_KEY
+
+{
+  "phone": "120363205432159876@g.us",
+  "text": "Ciao gruppo! Questo è un messaggio inviato da Trilly 🎉"
+}
+
+
+## La risposta contiene l’ID pubblico del messaggio:
+{
+  "id": ["MSG_123456789"]
+}

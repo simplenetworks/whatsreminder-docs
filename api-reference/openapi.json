@@ -1642,8 +1642,8 @@
     },
     "/api/partner/session/{id}/pair": {
       "post": {
-        "summary": "Ottieni il codice OTP.",
-        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly e da un numero di telefono, consentirà ad un partner di ricevere un codice OTP per un proprio cliente.",
+        "summary": "Connessione Account tramite fornitura Codice OTP",
+        "description": "Questa chiamata, a partire dall’ID sessione di uno specifico utilizzatore di Trilly e da un numero di telefono, consentirà ad un partner di ricevere un codice OTP per un proprio cliente che potrà utilizzarlo per connettere il telefono al sistema alternativamente al QR Code.",
         "parameters": [
           {
             "name": "api_key",
