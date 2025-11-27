@@ -61,7 +61,8 @@
         "api-reference/settings/online-state",
         "api-reference/settings/client-session-id",
         "api-reference/settings/session-status",
-        "api-reference/settings/client-snapshot"
+        "api-reference/settings/client-snapshot",
+        "api-reference/settings/client-daily-usage"
       ]
     },
     {

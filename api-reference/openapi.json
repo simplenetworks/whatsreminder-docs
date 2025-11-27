@@ -310,11 +310,26 @@
                         "type":"string"
                       },
                       "description": "ID dei messaggi generati."
+                    },
+                    "daily_api_cap": {
+                      "type": "integer",
+                      "description": "Numero massimo di chiamate API giornaliere effettuabili."
+                    },
+                    "daily_api_used": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere utilizzate."
+                    },
+                    "daily_api_remaining": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere rimanenti."
                     }
                   }
                 },
                 "example": {
-                  "id": ["ID_MESSAGGIO_GENERATO"]
+                  "id": ["ID_MESSAGGIO_GENERATO"],
+                  "daily_api_cap": 500,
+                  "daily_api_used": 5,
+                  "daily_api_remaining": 495
                 }
               }
             }
@@ -1265,6 +1280,18 @@
                         "type": "string"
                       },
                       "description": "Lista degli ID dei messaggi annullati."
+                    },
+                    "daily_api_cap": {
+                      "type": "integer",
+                      "description": "Numero massimo di chiamate API giornaliere effettuabili."
+                    },
+                    "daily_api_used": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere utilizzate."
+                    },
+                    "daily_api_remaining": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere rimanenti."
                     }
                   }
                 },
@@ -1274,7 +1301,10 @@
                     "msg_1",
                     "msg_2",
                     "msg_3"
-                  ]
+                  ],
+                  "daily_api_cap": 500,
+                  "daily_api_used": 5,
+                  "daily_api_remaining": 495
                 }
               }
             }
@@ -1743,6 +1773,82 @@
                 "example": {
                   "success": false,
                   "message": "Impossibile generare il codice di pairing dopo più tentativi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/apiDailyUsage": {
+      "get": {
+        "summary": "Recupero dati utilizzo API",
+        "description": "Questa chiamata consente di ottenere il riepilogo dell’utilizzo giornaliero delle API di un determinato cliente. L'endpoint richiede il parametro `searched_user_api_key`, che identifica il cliente di cui si desidera consultare il consumo API giornaliero. Un utente Partner può utilizzare questo endpoint per monitorare l’utilizzo delle API dei propri clienti associati, mentre un cliente standard può verificare il proprio utilizzo inserendo la propria API key.",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "description": "L'API key del cliente o del partner.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "searched_user_api_key",
+            "in": "query",
+            "required": true,
+            "description": "L'API key del cliente di cui si vuole conoscere l'utilizzo giornaliero delle API.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "daily_api_cap": {
+                      "type": "integer",
+                      "description": "Numero massimo di chiamate API giornaliere effettuabili."
+                    },
+                    "daily_api_used": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere utilizzate."
+                    },
+                    "daily_api_remaining": {
+                      "type": "integer",
+                      "description": "Numero di chiamate API giornaliere rimanenti."
+                    }
+                  }
+                },
+                "example": {
+                  "daily_api_cap": 500,
+                  "daily_api_used": 5,
+                  "daily_api_remaining": 495
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Descrizione dell'errore."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Non autorizzato"
                 }
               }
             }
